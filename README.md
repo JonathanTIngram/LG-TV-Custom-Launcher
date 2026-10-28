@@ -15,6 +15,20 @@ App logos are trademarks of their owners, so the repo doesn't include them.
 local build. To add or restyle an app, edit `app/brands.js`. Apps without a
 logo get a colored card with their name on it.
 
+## Color themes
+
+Every time the launcher opens, it picks a new color scheme. It chooses a
+random named color as the primary, then a color-harmony scheme (analogous,
+complementary, split-complementary, triadic or square). The secondary and
+tertiary are the named colors closest to the hues that scheme calls for, and
+the background is a deep color in the primary's hue. Press **GREEN** on the
+remote to shuffle. The footer shows the names of the current colors.
+
+Colors come from [meodai/color-names](https://github.com/meodai/color-names)
+(MIT, see `data/colornames.LICENSE`). The full list is stored locally in
+`data/colornames.csv`, and `tools/build_colors.py` turns it into
+`app/colors.js` during the build. Nothing is downloaded at runtime.
+
 ## Deploy over SSH
 
 Once the `lgtv` host is set up (see "Install on the TV" below), one command
@@ -72,6 +86,7 @@ file with:
 | Arrows / pointer  | move        | move               |
 | OK                | open app    | hide / show app    |
 | RED (or Edit btn) | edit mode   | done               |
+| GREEN             | new colors  | new colors         |
 | CH+ / CH−         | n/a         | move app left/right|
 | BACK              | n/a         | done               |
 

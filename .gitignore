@@ -11,3 +11,6 @@ __pycache__/
 *_rsa
 *.pem
 *.key
+
+# Generated from data/colornames.csv by tools/build_colors.py
+app/colors.js

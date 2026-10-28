@@ -42,7 +42,7 @@
 
   var KEY = {
     LEFT: 37, UP: 38, RIGHT: 39, DOWN: 40, ENTER: 13,
-    BACK: 461, ESC: 27, RED: 403, CH_UP: 33, CH_DOWN: 34, E: 69
+    BACK: 461, ESC: 27, RED: 403, GREEN: 404, CH_UP: 33, CH_DOWN: 34, E: 69, T: 84
   };
 
   var gridEl = document.getElementById('grid');
@@ -158,7 +158,7 @@
     editBtn.textContent = editing ? 'Done' : 'Edit';
     hintEl.textContent = editing
       ? 'OK: hide / show   ·   CH+ / CH−: move   ·   RED or BACK: done'
-      : 'OK: open   ·   RED: edit';
+      : 'OK: open   ·   RED: edit   ·   GREEN: new colors';
   }
 
   // White line drawings for TV system apps (24x24 viewBox).
@@ -196,7 +196,8 @@
 
     var card = document.createElement('div');
     card.className = 'card';
-    card.style.background = brand.bg || app.bg || colorFor(app.title);
+    if (brand.glyph) card.className += ' system'; // colored by the theme
+    else card.style.background = brand.bg || app.bg || colorFor(app.title);
     tile.appendChild(card);
 
     var src = brand.icon ? 'icons/' + brand.icon + '.png' : app.icon;
@@ -323,6 +324,8 @@
       case KEY.ENTER: activate(); break;
       case KEY.RED:
       case KEY.E: toggleEdit(); break;
+      case KEY.GREEN:
+      case KEY.T: Theme.shuffle(); break;
       case KEY.CH_UP: if (editing) move(-1); break;
       case KEY.CH_DOWN: if (editing) move(1); break;
       case KEY.BACK:
@@ -334,8 +337,11 @@
 
   editBtn.addEventListener('click', toggleEdit);
 
-  // Refresh when brought back to the foreground (picks up new installs).
-  document.addEventListener('webOSRelaunch', loadApps);
+  // Reopening the launcher (e.g. via Quick Access) counts as a launch: new colors.
+  document.addEventListener('webOSRelaunch', function () {
+    Theme.shuffle();
+    loadApps();
+  });
   document.addEventListener('visibilitychange', function () {
     if (!document.hidden) loadApps();
   });
@@ -351,5 +357,6 @@
   tick();
   setInterval(tick, 15000);
 
+  Theme.shuffle();
   loadApps();
 })();

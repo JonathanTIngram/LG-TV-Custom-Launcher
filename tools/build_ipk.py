@@ -10,6 +10,8 @@ import os
 import tarfile
 import time
 
+import build_colors
+
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 APP_DIR = os.path.join(ROOT, "app")
 OUT_DIR = os.path.join(ROOT, "dist")
@@ -52,6 +54,8 @@ def ar_member(name, data):
 
 
 def main():
+    build_colors.main()
+
     with open(os.path.join(APP_DIR, "appinfo.json")) as f:
         info = json.load(f)
     app_id, version = info["id"], info["version"]

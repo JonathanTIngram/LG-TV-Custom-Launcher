@@ -20,8 +20,8 @@ var BRANDS = [
   { ids: [], titles: ['tubi'], icon: 'tubi', bg: '#7408ff' },
   { ids: [], titles: ['hbo max', 'max'], wordmark: 'HBO max', bg: '#002be7' },
 
-  { ids: ['com.webos.app.livetv'], titles: ['live tv'], glyph: 'tv', bg: '#2b3440' },
-  { prefix: 'com.webos.app.hdmi', titles: [], glyph: 'input', bg: '#2b3440' },
-  { ids: ['com.webos.app.browser'], titles: ['web browser'], glyph: 'globe', bg: '#2b3440' },
-  { ids: ['com.palm.app.settings'], titles: ['settings'], glyph: 'gear', bg: '#2b3440' }
+  { ids: ['com.webos.app.livetv'], titles: ['live tv'], glyph: 'tv' },
+  { prefix: 'com.webos.app.hdmi', titles: [], glyph: 'input' },
+  { ids: ['com.webos.app.browser'], titles: ['web browser'], glyph: 'globe' },
+  { ids: ['com.palm.app.settings'], titles: ['settings'], glyph: 'gear' }
 ];
