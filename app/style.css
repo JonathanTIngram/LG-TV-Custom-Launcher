@@ -1,0 +1,135 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #101418;
+  color: #e8ecf0;
+  font-family: "LG Smart UI", "Museo Sans", Helvetica, Arial, sans-serif;
+}
+
+header {
+  display: flex;
+  align-items: baseline;
+  padding: 60px 96px 24px;
+}
+
+h1 { font-size: 56px; font-weight: 600; letter-spacing: 1px; }
+
+#mode {
+  flex: 1;
+  margin-left: 32px;
+  font-size: 28px;
+  color: #f2b84b;
+}
+
+#clock { font-size: 44px; color: #9aa6b2; }
+
+#grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  padding: 16px 84px;
+  height: 820px;
+  overflow: hidden;
+}
+
+.tile {
+  position: relative;
+  width: 264px;
+  height: 200px;
+  margin: 12px;
+  border-radius: 16px;
+  background: #1c232b;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 4px solid transparent;
+  transition: transform 0.12s ease, border-color 0.12s ease;
+  cursor: pointer;
+}
+
+.tile img {
+  width: 130px;
+  height: 130px;
+  object-fit: contain;
+}
+
+.tile .initials {
+  width: 120px;
+  height: 120px;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 52px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.tile .label {
+  margin-top: 10px;
+  font-size: 24px;
+  max-width: 236px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tile.focused {
+  border-color: #ffffff;
+  transform: scale(1.08);
+  z-index: 1;
+}
+
+.tile.hidden { opacity: 0.3; }
+
+.tile.hidden::after {
+  content: "HIDDEN";
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #f2b84b;
+}
+
+footer {
+  position: absolute;
+  left: 96px;
+  right: 96px;
+  bottom: 40px;
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  color: #7d8894;
+}
+
+#hint { flex: 1; }
+
+#editBtn {
+  font: inherit;
+  color: #e8ecf0;
+  background: #1c232b;
+  border: 2px solid #3a4550;
+  border-radius: 10px;
+  padding: 8px 24px;
+  cursor: pointer;
+}
+
+#toast {
+  position: absolute;
+  left: 50%;
+  bottom: 110px;
+  transform: translateX(-50%);
+  background: #2a333d;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-size: 26px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+#toast.show { opacity: 1; }

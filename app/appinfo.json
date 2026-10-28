@@ -1,0 +1,14 @@
+{
+  "id": "com.adfree.launcher",
+  "version": "1.0.0",
+  "vendor": "Personal",
+  "type": "web",
+  "main": "index.html",
+  "title": "Clean Home",
+  "icon": "icon.png",
+  "largeIcon": "largeIcon.png",
+  "bgColor": "#101418",
+  "resolution": "1920x1080",
+  "disableBackHistoryAPI": true,
+  "requiredPermissions": ["applications.query", "applications.operation"]
+}
