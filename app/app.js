@@ -31,6 +31,8 @@
     { id: 'amazon', title: 'Prime Video' },
     { id: 'com.disney.disneyplus-prod', title: 'Disney+' },
     { id: 'hulu', title: 'Hulu' },
+    // App id isn't documented; each is tried in turn and the one that works is remembered.
+    { id: 'com.hbo.hbomax', title: 'HBO Max', alt: ['com.wbd.stream', 'com.hbo.max', 'hbomax', 'max'] },
     { id: 'com.apple.appletv', title: 'Apple TV' },
     { id: 'spotify-beehive', title: 'Spotify' },
     { id: 'cdp-30', title: 'Plex' },
@@ -111,7 +113,7 @@
         });
       } else {
         list = FALLBACK_APPS.map(function (a) {
-          return { key: a.id, id: a.id, title: a.title, icon: '', bg: '', params: {} };
+          return { key: a.id, id: a.id, alt: a.alt || [], title: a.title, icon: '', bg: '', params: {} };
         });
       }
       apps = applyOrder(list);
@@ -263,8 +265,25 @@
       render();
       return;
     }
-    luna('luna://com.webos.applicationManager/launch', { id: app.id, params: app.params }, function (res) {
-      if (!res.returnValue) toast('Could not open ' + app.title + (res.errorText ? ': ' + res.errorText : ''));
+    prefs.resolved = prefs.resolved || {};
+    var known = prefs.resolved[app.key];
+    var ids = known ? [known] : [app.id].concat(app.alt || []);
+    launchFirst(app, ids, 0);
+  }
+
+  // Try each candidate id until one launches; remember the winner.
+  function launchFirst(app, ids, n) {
+    luna('luna://com.webos.applicationManager/launch', { id: ids[n], params: app.params }, function (res) {
+      if (res.returnValue) {
+        if (ids.length > 1) {
+          prefs.resolved[app.key] = ids[n];
+          savePrefs();
+        }
+      } else if (n + 1 < ids.length) {
+        launchFirst(app, ids, n + 1);
+      } else {
+        toast('Could not open ' + app.title + (res.errorText ? ': ' + res.errorText : ''));
+      }
     });
   }
 
