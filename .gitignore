@@ -1,0 +1,13 @@
+# Build output
+dist/
+
+# App logos are trademarks of their owners; fetched locally by tools/fetch_icons.py
+app/icons/
+
+__pycache__/
+*.pyc
+
+# Never commit TV credentials
+*_rsa
+*.pem
+*.key

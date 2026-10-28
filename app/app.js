@@ -159,22 +159,55 @@
       : 'OK: open   ·   RED: edit';
   }
 
+  // White line drawings for TV system apps (24x24 viewBox).
+  var GLYPHS = {
+    tv: '<rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/>',
+    input: '<rect x="3" y="7" width="18" height="10" rx="2"/><path d="M7 11h10M8 14h8"/>',
+    globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>',
+    gear: '<circle cx="12" cy="12" r="3.5"/><circle cx="12" cy="12" r="7.5" stroke-width="4" stroke-dasharray="3 2.9"/>'
+  };
+
+  function findBrand(app) {
+    var title = app.title.toLowerCase().replace(/^\s+|\s+$/g, '');
+    for (var b = 0; b < BRANDS.length; b++) {
+      var brand = BRANDS[b];
+      if ((brand.ids && brand.ids.indexOf(app.id) >= 0) ||
+          (brand.prefix && app.id.indexOf(brand.prefix) === 0) ||
+          brand.titles.indexOf(title) >= 0) {
+        return brand;
+      }
+    }
+    return null;
+  }
+
+  function wordmark(text) {
+    var el = document.createElement('div');
+    el.className = 'wordmark';
+    el.textContent = text;
+    return el;
+  }
+
   function makeTile(app, i) {
+    var brand = findBrand(app) || {};
     var tile = document.createElement('div');
     tile.className = 'tile' + (isHidden(app) ? ' hidden' : '');
 
-    var initials = document.createElement('div');
-    initials.className = 'initials';
-    initials.style.background = app.bg || colorFor(app.title);
-    initials.textContent = app.title.charAt(0).toUpperCase();
+    var card = document.createElement('div');
+    card.className = 'card';
+    card.style.background = brand.bg || app.bg || colorFor(app.title);
+    tile.appendChild(card);
 
-    if (app.icon) {
+    var src = brand.icon ? 'icons/' + brand.icon + '.png' : app.icon;
+    if (brand.glyph) {
+      card.innerHTML = '<svg class="glyph" viewBox="0 0 24 24">' + GLYPHS[brand.glyph] + '</svg>';
+    } else if (src) {
       var img = document.createElement('img');
-      img.src = app.icon;
-      img.onerror = function () { tile.replaceChild(initials, img); };
-      tile.appendChild(img);
+      img.className = 'logo';
+      img.src = src;
+      img.onerror = function () { card.replaceChild(wordmark(brand.wordmark || app.title), img); };
+      card.appendChild(img);
     } else {
-      tile.appendChild(initials);
+      card.appendChild(wordmark(brand.wordmark || app.title));
     }
 
     var label = document.createElement('div');
@@ -190,7 +223,7 @@
   function colorFor(text) {
     var h = 0;
     for (var i = 0; i < text.length; i++) h = (h * 31 + text.charCodeAt(i)) % 360;
-    return 'hsl(' + h + ', 45%, 38%)';
+    return 'hsl(' + h + ', 40%, 30%)';
   }
 
   function setFocus(i) {

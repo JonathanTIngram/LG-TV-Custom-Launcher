@@ -6,8 +6,49 @@ app directly.
 
 ## Build
 
-    python3 tools/make_icons.py   # only needed if you change the icon
+    python3 tools/fetch_icons.py  # downloads app logos into app/icons/ (git-ignored)
+    python3 tools/make_icons.py   # only needed if you change the launcher's own icon
     python3 tools/build_ipk.py    # -> dist/com.adfree.launcher_1.0.0_all.ipk
+
+App logos are trademarks of their owners, so the repo doesn't include them.
+`fetch_icons.py` downloads them to your machine and they're bundled into your
+local build. To add or restyle an app, edit `app/brands.js`. Apps without a
+logo get a colored card with their name on it.
+
+## Deploy over SSH
+
+Once the `lgtv` host is set up (see "Install on the TV" below), one command
+does everything:
+
+    ./tools/deploy.sh
+
+It builds the package, sends it to the TV, installs it and opens it. The TV
+has no `scp`, so the script streams the file over `ssh`.
+
+To set up the `lgtv` host, use the IP and passphrase shown in the Developer
+Mode app (Key Server must be on):
+
+    curl -o ~/.ssh/lgtv_rsa http://<TV_IP>:9991/webos_rsa && chmod 600 ~/.ssh/lgtv_rsa
+    ssh-keygen -p -f ~/.ssh/lgtv_rsa -m PEM -N ""   # enter the passphrase once
+
+Then add this to `~/.ssh/config`:
+
+    Host lgtv
+        HostName <TV_IP>
+        Port 9922
+        User prisoner
+        IdentityFile ~/.ssh/lgtv_rsa
+        HostKeyAlgorithms +ssh-rsa
+        PubkeyAcceptedAlgorithms +ssh-rsa
+
+On Fedora and RHEL-based systems, the system crypto policy blocks the TV's
+SHA-1 signatures. `deploy.sh` points `OPENSSL_CONF` at
+`~/.ssh/lgtv-openssl.cnf` to allow them for its own commands only. Create that
+file with:
+
+    .include /etc/ssl/openssl.cnf
+    [evp_properties]
+    rh-allow-sha1-signatures = yes
 
 ## Install on the TV
 
